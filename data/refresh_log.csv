@@ -1,2 +1,3 @@
 refresh_timestamp_utc,refresh_timestamp_zurich,trigger,series_succeeded,series_failed,any_new_data,status,notes
 2026-11-25 17:55:04 UTC,2026-11-25 18:55:04 CET,github_actions,9,0,True,success,All series refreshed cleanly; new observations persisted.
+2026-11-25 18:08:18 UTC,2026-11-25 19:08:18 CET,github_actions,9,0,False,success,All series refreshed cleanly; no new upstream observations.

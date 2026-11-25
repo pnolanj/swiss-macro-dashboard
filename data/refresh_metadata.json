@@ -1,13 +1,13 @@
 {
-  "last_successful_refresh_utc": "2026-11-25 17:55:04 UTC",
-  "last_successful_refresh_zurich": "2026-11-25 18:55:04 CET",
-  "last_attempt_utc": "2026-11-25 17:55:04 UTC",
-  "last_attempt_zurich": "2026-11-25 18:55:04 CET",
+  "last_successful_refresh_utc": "2026-11-25 18:08:18 UTC",
+  "last_successful_refresh_zurich": "2026-11-25 19:08:18 CET",
+  "last_attempt_utc": "2026-11-25 18:08:18 UTC",
+  "last_attempt_zurich": "2026-11-25 19:08:18 CET",
   "trigger": "github_actions",
   "status": "success",
   "series_succeeded": 9,
   "series_failed": 0,
-  "any_new_data": true,
+  "any_new_data": false,
   "series": {
     "gdp_real": {
       "name": "Real GDP",
@@ -25,7 +25,7 @@
       "row_count": 126,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "hicp_index": {
       "name": "Headline Inflation (HICP)",
@@ -43,7 +43,7 @@
       "row_count": 263,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "unemp_rate": {
       "name": "Unemployment Rate (Ages 15\u201374)",
@@ -61,7 +61,7 @@
       "row_count": 78,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "snb_policy_rate": {
       "name": "SNB Official Policy Rate",
@@ -79,7 +79,7 @@
       "row_count": 89,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "snb_libor_low": {
       "name": "SNB 3M CHF Libor Target Range (Lower)",
@@ -97,7 +97,7 @@
       "row_count": 233,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "snb_libor_high": {
       "name": "SNB 3M CHF Libor Target Range (Upper)",
@@ -115,7 +115,7 @@
       "row_count": 233,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "rate_3m": {
       "name": "3-Month Interbank Rate",
@@ -133,7 +133,7 @@
       "row_count": 328,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "yield_10y": {
       "name": "10-Year Swiss Government Bond Yield",
@@ -151,7 +151,7 @@
       "row_count": 862,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     },
     "usd_chf": {
       "name": "USD/CHF Spot Exchange Rate",
@@ -169,7 +169,7 @@
       "row_count": 14014,
       "status": "ok",
       "error_message": null,
-      "data_changed": true
+      "data_changed": false
     }
   }
 }

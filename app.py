@@ -58,7 +58,7 @@ PLOTLY_CONFIG = {
 }
 
 # ---------------------------------------------------------------------------
-# Page Configuration & CSS
+# Page Configuration & HTML Helper
 # ---------------------------------------------------------------------------
 st.set_page_config(
     page_title="Switzerland Macro Monitor | Institutional Research",
@@ -67,8 +67,14 @@ st.set_page_config(
 )
 
 
+def render_html(markup: str) -> None:
+    """Strip leading indentation and blank lines so CommonMark never parses HTML as code."""
+    compact = "\n".join(line.strip() for line in markup.splitlines() if line.strip())
+    st.markdown(compact, unsafe_allow_html=True)
+
+
 def inject_institutional_css() -> None:
-    st.markdown(
+    render_html(
         """
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -80,13 +86,15 @@ def inject_institutional_css() -> None:
         }
 
         .block-container {
-            padding-top: 1.2rem;
-            padding-bottom: 2.5rem;
-            max-width: 1560px;
+            padding-top: 2.4rem;
+            padding-bottom: 2rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            max-width: 1680px;
         }
 
-        /* Tabular numerals everywhere numbers appear */
-        .mono, .kpi-value, .kpi-delta, .kpi-obs, .status-ts, .chart-badge, .meta-val, table {
+        /* Tabular numerals across all numeric surfaces */
+        .mono, .kpi-value, .kpi-delta, .kpi-obs, .status-ts, .chart-badge, table {
             font-family: 'JetBrains Mono', monospace;
             font-variant-numeric: tabular-nums;
         }
@@ -105,17 +113,17 @@ def inject_institutional_css() -> None:
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: #64748B;
-            margin-bottom: 0.4rem;
-            margin-top: 0.8rem;
+            margin-bottom: 0.35rem;
+            margin-top: 0.75rem;
         }
         .sidebar-source-box {
             background: #F8FAFC;
             border: 1px solid #E2E8F0;
             border-radius: 4px;
-            padding: 0.75rem 0.85rem;
-            margin-top: 1rem;
-            font-size: 0.75rem;
-            line-height: 1.5;
+            padding: 0.7rem 0.8rem;
+            margin-top: 0.9rem;
+            font-size: 0.74rem;
+            line-height: 1.48;
             color: #475569;
         }
         .sidebar-source-box strong {
@@ -129,27 +137,27 @@ def inject_institutional_css() -> None:
             border: 1px solid #E2E8F0;
             border-left: 4px solid #0A192F;
             border-radius: 4px;
-            padding: 1.1rem 1.35rem;
-            margin-bottom: 1rem;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 0.85rem;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            gap: 0.9rem;
         }
         .exec-left {
             max-width: 780px;
         }
         .exec-eyebrow {
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             font-weight: 700;
             letter-spacing: 0.09em;
             text-transform: uppercase;
             color: #64748B;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.15rem;
         }
         .exec-title {
-            font-size: 1.48rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             color: #0A192F;
@@ -157,41 +165,41 @@ def inject_institutional_css() -> None:
             margin: 0;
         }
         .exec-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #475569;
-            margin-top: 0.3rem;
-            line-height: 1.4;
+            margin-top: 0.25rem;
+            line-height: 1.38;
         }
         .status-pill-bar {
             background: #F8FAFC;
             border: 1px solid #E2E8F0;
             border-radius: 4px;
-            padding: 0.65rem 0.95rem;
+            padding: 0.55rem 0.85rem;
             text-align: right;
-            min-width: 285px;
+            min-width: 270px;
         }
         .status-label-row {
             display: flex;
             justify-content: flex-end;
             align-items: center;
             gap: 0.45rem;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
         .status-micro {
-            font-size: 0.65rem;
+            font-size: 0.63rem;
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: #64748B;
         }
         .trigger-badge {
-            font-size: 0.64rem;
+            font-size: 0.62rem;
             font-weight: 600;
             letter-spacing: 0.04em;
             text-transform: uppercase;
             color: #0A192F;
             background: #E2E8F0;
-            padding: 0.12rem 0.45rem;
+            padding: 0.1rem 0.42rem;
             border-radius: 3px;
         }
         .trigger-badge.warn {
@@ -199,15 +207,15 @@ def inject_institutional_css() -> None:
             background: #FEE2E2;
         }
         .status-ts {
-            font-size: 0.76rem;
+            font-size: 0.74rem;
             font-weight: 600;
             color: #0A192F;
-            line-height: 1.45;
+            line-height: 1.4;
         }
         .status-ts-sub {
             font-family: 'JetBrains Mono', monospace;
             font-variant-numeric: tabular-nums;
-            font-size: 0.71rem;
+            font-size: 0.69rem;
             color: #475569;
         }
 
@@ -215,8 +223,8 @@ def inject_institutional_css() -> None:
         .kpi-grid {
             display: grid;
             grid-template-columns: repeat(6, minmax(0, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1.15rem;
+            gap: 0.65rem;
+            margin-bottom: 0.9rem;
         }
         @media (max-width: 1280px) {
             .kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -228,42 +236,43 @@ def inject_institutional_css() -> None:
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 4px;
-            padding: 0.8rem 0.9rem 0.7rem 0.9rem;
+            padding: 0.7rem 0.8rem 0.6rem 0.8rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 112px;
+            min-height: 102px;
         }
         .kpi-label {
-            font-size: 0.67rem;
+            font-size: 0.64rem;
             font-weight: 700;
             letter-spacing: 0.07em;
             text-transform: uppercase;
             color: #64748B;
-            line-height: 1.3;
+            line-height: 1.25;
         }
         .kpi-value {
-            font-size: 1.4rem;
+            font-size: 1.32rem;
             font-weight: 700;
             color: #0A192F;
             letter-spacing: -0.02em;
-            margin-top: 0.25rem;
+            margin-top: 0.2rem;
             line-height: 1.15;
         }
         .kpi-delta {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 500;
-            margin-top: 0.22rem;
+            margin-top: 0.18rem;
             color: #475569;
+            line-height: 1.3;
         }
         .kpi-delta.pos { color: #047857; }
         .kpi-delta.neg { color: #B91C1C; }
         .kpi-delta.neu { color: #475569; }
         .kpi-obs {
-            margin-top: 0.5rem;
-            padding-top: 0.42rem;
+            margin-top: 0.42rem;
+            padding-top: 0.35rem;
             border-top: 1px solid #F1F5F9;
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             color: #64748B;
             display: flex;
             justify-content: space-between;
@@ -274,43 +283,45 @@ def inject_institutional_css() -> None:
             font-weight: 600;
         }
 
-        /* Institutional Chart Panels (wrapping st.container(border=True)) */
+        /* Institutional 2x3 Chart Panels */
         div[data-testid="stVerticalBlockBorderWrapper"] {
             background-color: #FFFFFF;
             border: 1px solid #E2E8F0 !important;
             border-radius: 4px !important;
-            padding: 0.85rem 1rem 0.7rem 1rem !important;
+            padding: 0.68rem 0.78rem 0.58rem 0.78rem !important;
             box-shadow: none !important;
         }
         .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 0.25rem;
-            padding-bottom: 0.45rem;
+            gap: 0.45rem;
+            margin-bottom: 0.15rem;
+            padding-bottom: 0.38rem;
             border-bottom: 1px solid #F1F5F9;
+            min-height: 44px;
         }
         .chart-title {
-            font-size: 0.94rem;
+            font-size: 0.84rem;
             font-weight: 700;
             color: #0A192F;
             letter-spacing: -0.01em;
-            line-height: 1.25;
+            line-height: 1.22;
         }
         .chart-sub {
-            font-size: 0.74rem;
+            font-size: 0.68rem;
             color: #64748B;
-            margin-top: 0.1rem;
+            margin-top: 0.08rem;
+            line-height: 1.25;
         }
         .chart-badge {
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             font-weight: 600;
             color: #0A192F;
             background: #F1F5F9;
             border: 1px solid #E2E8F0;
             border-radius: 3px;
-            padding: 0.18rem 0.5rem;
+            padding: 0.14rem 0.42rem;
             white-space: nowrap;
         }
         .chart-badge.alert {
@@ -319,56 +330,62 @@ def inject_institutional_css() -> None:
             border-color: #FECACA;
         }
 
-        /* Mandatory Chart Metadata Footer */
+        /* Compact Mandatory Chart Metadata Footer for 3-Column Density */
         .chart-meta-footer {
-            margin-top: 0.2rem;
-            padding-top: 0.55rem;
+            margin-top: 0.12rem;
+            padding-top: 0.45rem;
             border-top: 1px solid #E2E8F0;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.28rem 0.85rem;
-            font-size: 0.7rem;
-            line-height: 1.35;
+            display: flex;
+            flex-direction: column;
+            gap: 0.18rem;
+            font-size: 0.66rem;
+            line-height: 1.32;
             color: #475569;
         }
-        .meta-item {
+        .meta-row {
             display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 0.45rem;
             flex-wrap: wrap;
-            gap: 0.25rem;
+        }
+        .meta-item {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.24rem;
         }
         .meta-key {
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.63rem;
+            letter-spacing: 0.04em;
+            font-size: 0.59rem;
             color: #64748B;
-            margin-top: 0.04rem;
+            white-space: nowrap;
         }
         .meta-val {
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.66rem;
             color: #334155;
         }
         .meta-obs-highlight {
             font-family: 'JetBrains Mono', monospace;
             font-variant-numeric: tabular-nums;
             font-weight: 700;
+            font-size: 0.67rem;
             color: #0A192F;
-        }
-        .meta-span-2 {
-            grid-column: span 2;
+            white-space: nowrap;
         }
 
         /* Tabs styling */
         .stTabs [data-baseweb="tab-list"] {
             gap: 0.25rem;
             border-bottom: 1px solid #E2E8F0;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
         .stTabs [data-baseweb="tab"] {
-            height: 2.35rem;
-            padding: 0 1rem;
-            font-size: 0.82rem;
+            height: 2.2rem;
+            padding: 0 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #64748B;
             background-color: transparent;
@@ -380,7 +397,7 @@ def inject_institutional_css() -> None:
             background-color: #FFFFFF !important;
         }
 
-        /* Institutional section heading */
+        /* Section headers & callouts */
         .section-head {
             font-size: 0.72rem;
             font-weight: 700;
@@ -403,8 +420,7 @@ def inject_institutional_css() -> None:
             line-height: 1.45;
         }
         </style>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -425,7 +441,7 @@ def get_metadata_mtime() -> float:
 @st.cache_data(ttl=300, show_spinner=False)
 def load_macro_bundle(meta_mtime: float) -> dict[str, Any]:
     """Load metadata, raw CSVs, refresh log, and compute ALL transforms on FULL history."""
-    _ = meta_mtime  # cache key dependency
+    _ = meta_mtime
     metadata: dict[str, Any] = {}
     if METADATA_PATH.exists():
         metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
@@ -443,36 +459,29 @@ def load_macro_bundle(meta_mtime: float) -> dict[str, Any]:
             raw_series[key] = pd.DataFrame(columns=["date", "value"])
 
     # Compute-before-slice transformations on FULL series
-    # 1. Real GDP (Quarterly)
     gdp = raw_series["gdp_real"].copy()
     gdp["gdp_yoy"] = (gdp["value"] / gdp["value"].shift(4) - 1.0) * 100.0
     gdp["gdp_qoq"] = (gdp["value"] / gdp["value"].shift(1) - 1.0) * 100.0
 
-    # 2. HICP (Monthly)
     hicp = raw_series["hicp_index"].copy()
     hicp["hicp_yoy"] = (hicp["value"] / hicp["value"].shift(12) - 1.0) * 100.0
 
-    # 3. Unemployment (Quarterly)
     unemp = raw_series["unemp_rate"].copy()
     unemp["unemp_ma4"] = unemp["value"].rolling(4, min_periods=4).mean()
 
-    # 4. SNB Policy Rate & Historical Corridor (Monthly)
     snb_policy = raw_series["snb_policy_rate"].copy()
     snb_low = raw_series["snb_libor_low"].copy().rename(columns={"value": "libor_low"})
     snb_high = raw_series["snb_libor_high"].copy().rename(columns={"value": "libor_high"})
     snb_corridor = pd.merge(snb_low, snb_high, on="date", how="inner").sort_values("date")
 
-    # 5. Yield Curve (Monthly inner join)
     r3m = raw_series["rate_3m"].copy().rename(columns={"value": "rate_3m"})
     y10 = raw_series["yield_10y"].copy().rename(columns={"value": "yield_10y"})
     rates = pd.merge(r3m, y10, on="date", how="inner").sort_values("date").reset_index(drop=True)
     rates["spread_bps"] = (rates["yield_10y"] - rates["rate_3m"]) * 100.0
 
-    # 6. USD/CHF (Daily)
     fx = raw_series["usd_chf"].copy()
     fx["ma_30d"] = fx["value"].rolling(30, min_periods=15).mean()
 
-    # Refresh Log
     if LOG_PATH.exists():
         log_df = pd.read_csv(LOG_PATH)
     else:
@@ -489,11 +498,11 @@ def load_macro_bundle(meta_mtime: float) -> dict[str, Any]:
             ]
         )
 
-    # Global min/max years across primary datasets
-    all_dates = pd.concat(
-        [df["date"] for k, df in raw_series.items() if not df.empty],
-        ignore_index=True,
-    ) if any(not df.empty for df in raw_series.values()) else pd.Series(dtype="datetime64[ns]")
+    all_dates = (
+        pd.concat([df["date"] for df in raw_series.values() if not df.empty], ignore_index=True)
+        if any(not df.empty for df in raw_series.values())
+        else pd.Series(dtype="datetime64[ns]")
+    )
 
     min_year = int(all_dates.min().year) if not all_dates.empty else 2000
     max_year = int(all_dates.max().year) if not all_dates.empty else datetime.utcnow().year
@@ -565,22 +574,22 @@ def slice_by_dates(df: pd.DataFrame, start_dt: pd.Timestamp, end_dt: pd.Timestam
 
 def apply_institutional_layout(
     fig: go.Figure,
-    height: int = 335,
+    height: int = 255,
     y_title: str | None = None,
     y_suffix: str = "",
     y_tickformat: str | None = None,
 ) -> go.Figure:
     fig.update_layout(
         height=height,
-        margin=dict(l=46, r=18, t=34, b=32),
+        margin=dict(l=38, r=10, t=28, b=22),
         plot_bgcolor=CARD_BG,
         paper_bgcolor=CARD_BG,
-        font=dict(family="Inter, sans-serif", size=11, color=SLATE),
+        font=dict(family="Inter, sans-serif", size=10, color=SLATE),
         hovermode="x unified",
         hoverlabel=dict(
             bgcolor=NAVY,
             bordercolor=NAVY,
-            font=dict(family="JetBrains Mono, monospace", size=11, color="#FFFFFF"),
+            font=dict(family="JetBrains Mono, monospace", size=10.5, color="#FFFFFF"),
         ),
         legend=dict(
             orientation="h",
@@ -589,28 +598,31 @@ def apply_institutional_layout(
             xanchor="left",
             x=0.0,
             bgcolor="rgba(255,255,255,0)",
-            font=dict(size=10.5, color=SLATE),
-            itemwidth=30,
+            font=dict(size=9.5, color=SLATE),
+            itemwidth=26,
+            tracegroupgap=6,
         ),
     )
     fig.update_xaxes(
         showgrid=False,
         linecolor=BORDER_COLOR,
         linewidth=1,
-        tickfont=dict(family="JetBrains Mono, monospace", size=10, color=STEEL),
+        tickfont=dict(family="JetBrains Mono, monospace", size=9.5, color=STEEL),
         zeroline=False,
+        nticks=6,
     )
     fig.update_yaxes(
         showgrid=True,
         gridcolor=GRID_COLOR,
         gridwidth=1,
         linecolor="rgba(0,0,0,0)",
-        tickfont=dict(family="JetBrains Mono, monospace", size=10, color=STEEL),
+        tickfont=dict(family="JetBrains Mono, monospace", size=9.5, color=STEEL),
         ticksuffix=y_suffix,
         tickformat=y_tickformat,
         title_text=y_title,
-        title_font=dict(size=10.5, color=STEEL),
+        title_font=dict(size=9.5, color=STEEL),
         zeroline=False,
+        nticks=5,
     )
     return fig
 
@@ -623,14 +635,14 @@ def add_empty_state(fig: go.Figure, message: str = "No observations in selected 
         x=0.5,
         y=0.5,
         showarrow=False,
-        font=dict(family="Inter, sans-serif", size=12, color=STEEL),
+        font=dict(family="Inter, sans-serif", size=11, color=STEEL),
     )
     return fig
 
 
 def render_chart_header(title: str, subtitle: str, badge_text: str, alert: bool = False) -> None:
     badge_cls = "chart-badge alert" if alert else "chart-badge"
-    st.markdown(
+    render_html(
         f"""
         <div class="chart-header">
             <div>
@@ -639,8 +651,7 @@ def render_chart_header(title: str, subtitle: str, badge_text: str, alert: bool 
             </div>
             <div class="{badge_cls}">{html.escape(badge_text)}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -651,22 +662,29 @@ def render_chart_footer(
     source_id: str,
     latest_obs: str,
 ) -> None:
-    st.markdown(
+    render_html(
         f"""
         <div class="chart-meta-footer">
-            <div class="meta-item"><span class="meta-key">Units:</span> <span class="meta-val">{html.escape(units)}</span></div>
-            <div class="meta-item"><span class="meta-key">Frequency:</span> <span class="meta-val">{html.escape(frequency)}</span></div>
-            <div class="meta-item meta-span-2"><span class="meta-key">Transformation:</span> <span class="meta-val">{html.escape(transformation)}</span></div>
-            <div class="meta-item"><span class="meta-key">Source / ID:</span> <span class="meta-val">{html.escape(source_id)}</span></div>
-            <div class="meta-item"><span class="meta-key">Latest Obs.:</span> <span class="meta-obs-highlight">{html.escape(latest_obs)}</span></div>
+            <div class="meta-row">
+                <span class="meta-item"><span class="meta-key">Units:</span> <span class="meta-val">{html.escape(units)}</span></span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-item"><span class="meta-key">Transform:</span> <span class="meta-val">{html.escape(transformation)}</span></span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-item"><span class="meta-key">Source:</span> <span class="meta-val">{html.escape(source_id)}</span></span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-item"><span class="meta-key">Freq:</span> <span class="meta-val">{html.escape(frequency)}</span></span>
+                <span class="meta-item"><span class="meta-key">Latest Obs:</span> <span class="meta-obs-highlight">{html.escape(latest_obs)}</span></span>
+            </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 # ---------------------------------------------------------------------------
-# Chart Builders (6 Institutional Figures)
+# Chart Builders (6 Tightened Institutional Figures for 2 x 3 Grid)
 # ---------------------------------------------------------------------------
 def build_gdp_chart(df: pd.DataFrame, metric_mode: str) -> go.Figure:
     is_yoy = metric_mode == "YoY % Growth"
@@ -675,7 +693,7 @@ def build_gdp_chart(df: pd.DataFrame, metric_mode: str) -> go.Figure:
 
     fig = go.Figure()
     if sub.empty:
-        return apply_institutional_layout(add_empty_state(fig), y_suffix="%")
+        return apply_institutional_layout(add_empty_state(fig), height=255, y_suffix="%")
 
     colors = [NAVY if v >= 0 else CRIMSON for v in sub[col]]
     fig.add_trace(
@@ -688,7 +706,7 @@ def build_gdp_chart(df: pd.DataFrame, metric_mode: str) -> go.Figure:
         )
     )
     fig.add_hline(y=0, line_color=REF_GREY, line_width=1)
-    apply_institutional_layout(fig, y_suffix="%")
+    apply_institutional_layout(fig, height=255, y_suffix="%")
     fig.update_layout(showlegend=False)
     return fig
 
@@ -700,7 +718,7 @@ def build_hicp_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
 
     fig = go.Figure()
     if sub.empty:
-        return apply_institutional_layout(add_empty_state(fig), y_suffix="%" if is_yoy else "")
+        return apply_institutional_layout(add_empty_state(fig), height=255, y_suffix="%" if is_yoy else "")
 
     if is_yoy:
         fig.add_hrect(
@@ -719,10 +737,10 @@ def build_hicp_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             yref="y",
             xanchor="right",
             yanchor="bottom",
-            text="SNB Price Stability Range (0%–2%)",
+            text="SNB Stability Range (0%–2%)",
             showarrow=False,
-            font=dict(family="Inter, sans-serif", size=9.5, color=EMERALD),
-            bgcolor="rgba(255,255,255,0.75)",
+            font=dict(family="Inter, sans-serif", size=8.5, color=EMERALD),
+            bgcolor="rgba(255,255,255,0.82)",
         )
 
     fig.add_trace(
@@ -731,7 +749,7 @@ def build_hicp_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             y=sub[col],
             mode="lines",
             name="HICP YoY %" if is_yoy else "HICP Index (2025=100)",
-            line=dict(color=NAVY, width=2.4),
+            line=dict(color=NAVY, width=2.2),
             hovertemplate=(
                 "HICP YoY: %{y:+.2f}%<extra></extra>"
                 if is_yoy
@@ -739,23 +757,23 @@ def build_hicp_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             ),
         )
     )
-    apply_institutional_layout(fig, y_suffix="%" if is_yoy else "")
+    apply_institutional_layout(fig, height=255, y_suffix="%" if is_yoy else "")
     return fig
 
 
 def build_unemp_chart(df: pd.DataFrame) -> go.Figure:
     fig = go.Figure()
     if df.empty:
-        return apply_institutional_layout(add_empty_state(fig), y_suffix="%")
+        return apply_institutional_layout(add_empty_state(fig), height=255, y_suffix="%")
 
     fig.add_trace(
         go.Scatter(
             x=df["date"],
             y=df["value"],
             mode="lines+markers",
-            name="Quarterly Rate (NSA)",
-            line=dict(color=REF_GREY, width=1.6),
-            marker=dict(size=4.5, color=REF_GREY),
+            name="Quarterly (NSA)",
+            line=dict(color=REF_GREY, width=1.4),
+            marker=dict(size=3.8, color=REF_GREY),
             hovertemplate="Quarterly Rate: %{y:.2f}%<extra></extra>",
         )
     )
@@ -766,12 +784,12 @@ def build_unemp_chart(df: pd.DataFrame) -> go.Figure:
                 x=ma_sub["date"],
                 y=ma_sub["unemp_ma4"],
                 mode="lines",
-                name="4-Quarter Moving Avg.",
-                line=dict(color=NAVY, width=2.5),
+                name="4Q Moving Avg.",
+                line=dict(color=NAVY, width=2.3),
                 hovertemplate="4Q Moving Avg: %{y:.2f}%<extra></extra>",
             )
         )
-    apply_institutional_layout(fig, y_suffix="%")
+    apply_institutional_layout(fig, height=255, y_suffix="%")
     return fig
 
 
@@ -783,7 +801,7 @@ def build_snb_policy_chart(
 ) -> go.Figure:
     fig = go.Figure()
     if policy_df.empty and corridor_df.empty:
-        return apply_institutional_layout(add_empty_state(fig), y_suffix="%")
+        return apply_institutional_layout(add_empty_state(fig), height=265, y_suffix="%")
 
     if not corridor_df.empty:
         fig.add_trace(
@@ -792,9 +810,9 @@ def build_snb_policy_chart(
                 y=corridor_df["libor_high"],
                 mode="lines",
                 line=dict(color="rgba(100, 116, 139, 0.45)", width=1, shape="hv"),
-                name="3M CHF Libor Target Range (Pre-Jun 2019)",
+                name="3M Libor Range",
                 legendgroup="corridor",
-                hovertemplate="Libor Upper Bound: %{y:.2f}%<extra></extra>",
+                hovertemplate="Libor Upper: %{y:.2f}%<extra></extra>",
             )
         )
         fig.add_trace(
@@ -805,10 +823,10 @@ def build_snb_policy_chart(
                 fill="tonexty",
                 fillcolor="rgba(100, 116, 139, 0.16)",
                 line=dict(color="rgba(100, 116, 139, 0.45)", width=1, shape="hv"),
-                name="3M CHF Libor Lower",
+                name="3M Libor Lower",
                 legendgroup="corridor",
                 showlegend=False,
-                hovertemplate="Libor Lower Bound: %{y:.2f}%<extra></extra>",
+                hovertemplate="Libor Lower: %{y:.2f}%<extra></extra>",
             )
         )
 
@@ -818,8 +836,8 @@ def build_snb_policy_chart(
                 x=policy_df["date"],
                 y=policy_df["value"],
                 mode="lines",
-                name="SNB Official Policy Rate (LZ)",
-                line=dict(color=CRIMSON, width=2.5, shape="hv"),
+                name="SNB Policy Rate (LZ)",
+                line=dict(color=CRIMSON, width=2.3, shape="hv"),
                 hovertemplate="SNB Policy Rate: %{y:.2f}%<extra></extra>",
             )
         )
@@ -836,23 +854,23 @@ def build_snb_policy_chart(
             y1=1,
             xref="x",
             yref="paper",
-            line=dict(color=STEEL, width=1.1, dash="dot"),
+            line=dict(color=STEEL, width=1.0, dash="dot"),
         )
         fig.add_annotation(
             x="2019-06-13",
             y=0.98,
             xref="x",
             yref="paper",
-            text="SNB Policy Rate Introduced",
+            text="Policy Rate Intro (Jun '19)",
             showarrow=False,
             xanchor="left",
             yanchor="top",
-            xshift=5,
-            font=dict(family="Inter, sans-serif", size=9.5, color=SLATE),
+            xshift=4,
+            font=dict(family="Inter, sans-serif", size=8.5, color=SLATE),
             bgcolor="rgba(255,255,255,0.85)",
         )
 
-    apply_institutional_layout(fig, y_suffix="%")
+    apply_institutional_layout(fig, height=265, y_suffix="%")
     return fig
 
 
@@ -860,7 +878,7 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
     show_spread = view_mode == "Rates (3M & 10Y) + 10Y–3M Spread"
     if df.empty:
         fig = go.Figure()
-        return apply_institutional_layout(add_empty_state(fig), y_suffix="%")
+        return apply_institutional_layout(add_empty_state(fig), height=265, y_suffix="%")
 
     if show_spread:
         fig = make_subplots(
@@ -868,15 +886,15 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             cols=1,
             shared_xaxes=True,
             vertical_spacing=0.09,
-            row_heights=[0.68, 0.32],
+            row_heights=[0.66, 0.34],
         )
         fig.add_trace(
             go.Scatter(
                 x=df["date"],
                 y=df["yield_10y"],
                 mode="lines",
-                name="10Y Gov. Yield",
-                line=dict(color=NAVY, width=2.3),
+                name="10Y Yield",
+                line=dict(color=NAVY, width=2.1),
                 hovertemplate="10Y Yield: %{y:.2f}%<extra></extra>",
             ),
             row=1,
@@ -887,8 +905,8 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
                 x=df["date"],
                 y=df["rate_3m"],
                 mode="lines",
-                name="3M Interbank Rate",
-                line=dict(color=ACCENT_BLUE, width=2.0, dash="dash"),
+                name="3M Rate",
+                line=dict(color=ACCENT_BLUE, width=1.8, dash="dash"),
                 hovertemplate="3M Rate: %{y:.2f}%<extra></extra>",
             ),
             row=1,
@@ -901,7 +919,7 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             go.Bar(
                 x=df["date"],
                 y=df["spread_bps"],
-                name="10Y–3M Spread (bps)",
+                name="Spread (bps)",
                 marker_color=spread_colors,
                 opacity=0.88,
                 hovertemplate="10Y–3M Spread: %{y:+.0f} bps<extra></extra>",
@@ -911,11 +929,11 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
         )
         fig.add_hline(y=0.0, line_color=REF_GREY, line_width=0.9, row=2, col=1)
 
-        apply_institutional_layout(fig, height=345)
-        fig.update_yaxes(ticksuffix="%", row=1, col=1)
-        fig.update_yaxes(ticksuffix=" bps", tickfont=dict(size=9.5), row=2, col=1)
-        fig.update_xaxes(showgrid=False, linecolor=BORDER_COLOR, row=1, col=1)
-        fig.update_xaxes(showgrid=False, linecolor=BORDER_COLOR, row=2, col=1)
+        apply_institutional_layout(fig, height=265)
+        fig.update_yaxes(ticksuffix="%", nticks=4, row=1, col=1)
+        fig.update_yaxes(ticksuffix="bp", nticks=3, tickfont=dict(size=8.5), row=2, col=1)
+        fig.update_xaxes(showgrid=False, linecolor=BORDER_COLOR, nticks=6, row=1, col=1)
+        fig.update_xaxes(showgrid=False, linecolor=BORDER_COLOR, nticks=6, row=2, col=1)
         return fig
 
     fig = go.Figure()
@@ -924,8 +942,8 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             x=df["date"],
             y=df["yield_10y"],
             mode="lines",
-            name="10Y Gov. Yield",
-            line=dict(color=NAVY, width=2.3),
+            name="10Y Yield",
+            line=dict(color=NAVY, width=2.1),
             hovertemplate="10Y Yield: %{y:.2f}%<extra></extra>",
         )
     )
@@ -934,28 +952,28 @@ def build_yield_curve_chart(df: pd.DataFrame, view_mode: str) -> go.Figure:
             x=df["date"],
             y=df["rate_3m"],
             mode="lines",
-            name="3M Interbank Rate",
-            line=dict(color=ACCENT_BLUE, width=2.0, dash="dash"),
+            name="3M Rate",
+            line=dict(color=ACCENT_BLUE, width=1.8, dash="dash"),
             hovertemplate="3M Rate: %{y:.2f}%<extra></extra>",
         )
     )
     fig.add_hline(y=0.0, line_color=REF_GREY, line_width=1)
-    apply_institutional_layout(fig, height=345, y_suffix="%")
+    apply_institutional_layout(fig, height=265, y_suffix="%")
     return fig
 
 
 def build_fx_chart(df: pd.DataFrame) -> go.Figure:
     fig = go.Figure()
     if df.empty:
-        return apply_institutional_layout(add_empty_state(fig), height=345)
+        return apply_institutional_layout(add_empty_state(fig), height=265)
 
     fig.add_trace(
         go.Scatter(
             x=df["date"],
             y=df["value"],
             mode="lines",
-            name="USD/CHF Daily Spot",
-            line=dict(color=ACCENT_BLUE, width=1.4),
+            name="Daily Spot",
+            line=dict(color=ACCENT_BLUE, width=1.3),
             opacity=0.85,
             hovertemplate="Spot: %{y:.4f} CHF/USD<extra></extra>",
         )
@@ -967,8 +985,8 @@ def build_fx_chart(df: pd.DataFrame) -> go.Figure:
                 x=ma_sub["date"],
                 y=ma_sub["ma_30d"],
                 mode="lines",
-                name="30-Trading-Day MA",
-                line=dict(color=NAVY, width=2.3),
+                name="30D MA",
+                line=dict(color=NAVY, width=2.1),
                 hovertemplate="30D MA: %{y:.4f} CHF/USD<extra></extra>",
             )
         )
@@ -980,15 +998,15 @@ def build_fx_chart(df: pd.DataFrame) -> go.Figure:
         yref="paper",
         xanchor="right",
         yanchor="top",
-        text="Quotation: CHF per 1 USD (Down = CHF Appreciation)",
+        text="CHF / 1 USD (Down = CHF Appreciation)",
         showarrow=False,
-        font=dict(family="Inter, sans-serif", size=9.5, color=SLATE),
+        font=dict(family="Inter, sans-serif", size=8.5, color=SLATE),
         bgcolor="rgba(248, 250, 252, 0.92)",
         bordercolor=BORDER_COLOR,
         borderwidth=1,
-        borderpad=4,
+        borderpad=3,
     )
-    apply_institutional_layout(fig, height=345, y_tickformat=".3f")
+    apply_institutional_layout(fig, height=265, y_tickformat=".3f")
     return fig
 
 
@@ -1004,7 +1022,7 @@ def render_header(metadata: dict[str, Any]) -> None:
     badge_cls = "trigger-badge warn" if failed > 0 else "trigger-badge"
     status_suffix = f" ({failed} ERR)" if failed > 0 else ""
 
-    st.markdown(
+    render_html(
         f"""
         <div class="exec-banner">
             <div class="exec-left">
@@ -1023,8 +1041,7 @@ def render_header(metadata: dict[str, Any]) -> None:
                 <div class="status-ts-sub">Zurich: {html.escape(str(zurich_ts))}</div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -1141,7 +1158,7 @@ def render_kpi_strip(bundle: dict[str, Any]) -> None:
     fx = bundle["fx"]
     if not fx.empty:
         latest = fx.iloc[-1]
-        lookback_idx = max(0, len(fx) - 22)  # ~30 calendar days (~21 trading days)
+        lookback_idx = max(0, len(fx) - 22)
         ref_val = fx.iloc[lookback_idx]["value"]
         chg_pct = ((latest["value"] / ref_val) - 1.0) * 100.0 if ref_val else np.nan
         delta_txt = f"30D: {chg_pct:+.2f}% (CHF/USD)" if pd.notna(chg_pct) else "—"
@@ -1157,25 +1174,20 @@ def render_kpi_strip(bundle: dict[str, Any]) -> None:
     else:
         cards.append({"label": "USD/CHF Spot Rate", "value": "N/A", "delta": "—", "cls": "neu", "obs": "N/A"})
 
-    card_html = []
-    for c in cards:
-        card_html.append(
-            f"""
-            <div class="kpi-card">
-                <div>
-                    <div class="kpi-label">{html.escape(c['label'])}</div>
-                    <div class="kpi-value">{html.escape(c['value'])}</div>
-                    <div class="kpi-delta {c['cls']}">{html.escape(c['delta'])}</div>
-                </div>
-                <div class="kpi-obs">
-                    <span>Obs:</span>
-                    <strong>{html.escape(c['obs'])}</strong>
-                </div>
-            </div>
-            """
+    card_html = [
+        (
+            f'<div class="kpi-card">'
+            f'<div>'
+            f'<div class="kpi-label">{html.escape(c["label"])}</div>'
+            f'<div class="kpi-value">{html.escape(c["value"])}</div>'
+            f'<div class="kpi-delta {c["cls"]}">{html.escape(c["delta"])}</div>'
+            f'</div>'
+            f'<div class="kpi-obs"><span>Obs:</span><strong>{html.escape(c["obs"])}</strong></div>'
+            f'</div>'
         )
-
-    st.markdown(f'<div class="kpi-grid">{"".join(card_html)}</div>', unsafe_allow_html=True)
+        for c in cards
+    ]
+    render_html(f'<div class="kpi-grid">{"".join(card_html)}</div>')
 
 
 # ---------------------------------------------------------------------------
@@ -1183,7 +1195,7 @@ def render_kpi_strip(bundle: dict[str, Any]) -> None:
 # ---------------------------------------------------------------------------
 def render_sidebar(bundle: dict[str, Any]) -> dict[str, Any]:
     with st.sidebar:
-        st.markdown('<div class="sidebar-eyebrow">Sample Period</div>', unsafe_allow_html=True)
+        render_html('<div class="sidebar-eyebrow">Sample Period</div>')
         preset = st.radio(
             "Sample Period",
             options=[
@@ -1230,7 +1242,7 @@ def render_sidebar(bundle: dict[str, Any]) -> dict[str, Any]:
             start_dt = pd.Timestamp(start_year, 1, 1)
             end_dt = pd.Timestamp(end_year, 12, 31)
 
-        st.markdown('<div class="sidebar-eyebrow">Analytical Views</div>', unsafe_allow_html=True)
+        render_html('<div class="sidebar-eyebrow">Analytical Views</div>')
         gdp_metric = st.radio(
             "Real GDP Metric",
             options=["YoY % Growth", "QoQ % Growth"],
@@ -1247,20 +1259,20 @@ def render_sidebar(bundle: dict[str, Any]) -> dict[str, Any]:
             index=0,
         )
 
-        st.markdown('<div class="sidebar-eyebrow">Live Ingestion</div>', unsafe_allow_html=True)
+        render_html('<div class="sidebar-eyebrow">Live Ingestion</div>')
         if st.button("Run Live Data Refresh", use_container_width=True, type="primary"):
             with st.spinner("Refreshing primary series from FRED and SNB..."):
                 result = run_refresh(trigger="manual_ui", print_table=False)
             st.cache_data.clear()
             new_flag = "new source data detected" if result.get("any_new_data") else "no new upstream releases"
+            total_series = result.get("series_succeeded", 0) + result.get("series_failed", 0)
             st.session_state["refresh_toast"] = (
                 f"Refresh complete ({result.get('last_attempt_utc')}) — "
-                f"{result.get('series_succeeded')}/{result.get('series_succeeded', 0) + result.get('series_failed', 0)} "
-                f"series OK; {new_flag}."
+                f"{result.get('series_succeeded')}/{total_series} series OK; {new_flag}."
             )
             st.rerun()
 
-        st.markdown(
+        render_html(
             """
             <div class="sidebar-source-box">
                 <strong>Primary Data Providers</strong><br/>
@@ -1270,8 +1282,7 @@ def render_sidebar(bundle: dict[str, Any]) -> dict[str, Any]:
                 GitHub Actions: Daily 12:00 UTC (13:00 CET)<br/>
                 Keyless public CSV ingestion with atomic commits.
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
     return {
@@ -1285,7 +1296,7 @@ def render_sidebar(bundle: dict[str, Any]) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Tab 1 — Executive Macro Dashboard
+# Tab 1 — Executive Macro Dashboard (Tight 2 Rows x 3 Columns)
 # ---------------------------------------------------------------------------
 def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
     start_dt, end_dt = cfg["start_dt"], cfg["end_dt"]
@@ -1298,10 +1309,10 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
     rates_slice = slice_by_dates(bundle["rates"], start_dt, end_dt)
     fx_slice = slice_by_dates(bundle["fx"], start_dt, end_dt)
 
-    # Row 1: Real GDP | Headline Inflation
-    r1_left, r1_right = st.columns(2, gap="medium")
+    # Row 1: Real Economy — GDP | Headline Inflation | Unemployment
+    r1_c1, r1_c2, r1_c3 = st.columns(3, gap="small")
 
-    with r1_left:
+    with r1_c1:
         with st.container(border=True):
             is_yoy = cfg["gdp_metric"] == "YoY % Growth"
             col = "gdp_yoy" if is_yoy else "gdp_qoq"
@@ -1312,7 +1323,7 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
 
             render_chart_header(
                 title="Real GDP Growth",
-                subtitle=f"Chained-volume output expansion ({cfg['gdp_metric']})",
+                subtitle=f"Chained-volume output ({cfg['gdp_metric']})",
                 badge_text=badge,
                 alert=bool(pd.notna(latest_val) and latest_val < 0),
             )
@@ -1322,18 +1333,18 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
                 config=PLOTLY_CONFIG,
             )
             render_chart_footer(
-                units="Percent (%) from Millions of Chained 2010 EUR (SA)",
+                units="% from Chained 2010 EUR (SA)",
                 transformation=(
                     "YoY % = (X_t / X_{t-4} - 1) × 100"
                     if is_yoy
                     else "QoQ % = (X_t / X_{t-1} - 1) × 100"
                 ),
                 frequency="Quarterly",
-                source_id="Eurostat via FRED (CLVMNACSCAB1GQCH)",
+                source_id="Eurostat / FRED (CLVMNACSCAB1GQCH)",
                 latest_obs=latest_obs,
             )
 
-    with r1_right:
+    with r1_c2:
         with st.container(border=True):
             is_yoy = cfg["inflation_view"] == "YoY % Inflation"
             col = "hicp_yoy" if is_yoy else "value"
@@ -1350,9 +1361,7 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
 
             render_chart_header(
                 title="Headline Inflation (HICP)",
-                subtitle="Harmonised Index of Consumer Prices vs. SNB 0%–2% stability band"
-                if is_yoy
-                else "Harmonised Index of Consumer Prices — Raw Index Level",
+                subtitle="HICP vs. SNB 0%–2% stability band" if is_yoy else "HICP raw index level",
                 badge_text=badge,
                 alert=bool(is_yoy and pd.notna(latest_val) and (latest_val < 0 or latest_val > 2.0)),
             )
@@ -1362,21 +1371,18 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
                 config=PLOTLY_CONFIG,
             )
             render_chart_footer(
-                units="Percent (%) YoY" if is_yoy else "Index (2025 = 100), NSA",
+                units="% YoY" if is_yoy else "Index (2025 = 100), NSA",
                 transformation=(
                     "YoY % = (X_t / X_{t-12} - 1) × 100"
                     if is_yoy
                     else "None — Raw Level (Index 2025 = 100)"
                 ),
                 frequency="Monthly",
-                source_id="Eurostat via FRED (CP0000CHM086NEST)",
+                source_id="Eurostat / FRED (CP0000CHM086NEST)",
                 latest_obs=latest_obs,
             )
 
-    # Row 2: Unemployment Rate | SNB Policy Rate
-    r2_left, r2_right = st.columns(2, gap="medium")
-
-    with r2_left:
+    with r1_c3:
         with st.container(border=True):
             valid_u = bundle["unemp"]
             latest_val = valid_u.iloc[-1]["value"] if not valid_u.empty else np.nan
@@ -1384,8 +1390,8 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
             badge = f"{latest_val:.2f}%" if pd.notna(latest_val) else "N/A"
 
             render_chart_header(
-                title="Unemployment Rate (Ages 15–74)",
-                subtitle="Quarterly labor-force rate with 4-quarter trend smoother",
+                title="Unemployment Rate (15–74)",
+                subtitle="Quarterly rate with 4Q moving average",
                 badge_text=badge,
             )
             st.plotly_chart(
@@ -1394,14 +1400,17 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
                 config=PLOTLY_CONFIG,
             )
             render_chart_footer(
-                units="Percent of Labor Force (NSA)",
-                transformation="Raw Level + 4-Quarter Trailing Moving Average",
+                units="% of Labor Force (NSA)",
+                transformation="Raw Level + 4-Quarter Trailing MA",
                 frequency="Quarterly",
-                source_id="OECD via FRED (LRUN74TTCHQ156N)",
+                source_id="OECD / FRED (LRUN74TTCHQ156N)",
                 latest_obs=latest_obs,
             )
 
-    with r2_right:
+    # Row 2: Monetary & Markets — SNB Policy Rate | Yield Curve | USD/CHF Spot
+    r2_c1, r2_c2, r2_c3 = st.columns(3, gap="small")
+
+    with r2_c1:
         with st.container(border=True):
             valid_snb = bundle["snb_policy"]
             latest_val = valid_snb.iloc[-1]["value"] if not valid_snb.empty else np.nan
@@ -1410,7 +1419,7 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
 
             render_chart_header(
                 title="SNB Monetary Policy Rate",
-                subtitle="Official Policy Rate (Jun 2019–Present) & pre-2019 3M Libor target corridor",
+                subtitle="Policy rate (LZ) & pre-2019 Libor corridor",
                 badge_text=badge,
                 alert=bool(pd.notna(latest_val) and latest_val < 0),
             )
@@ -1420,17 +1429,14 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
                 config=PLOTLY_CONFIG,
             )
             render_chart_footer(
-                units="Percent per annum (End of Month)",
-                transformation="None — Raw Policy Rate (LZ) & Target Bounds (UG0–OG0)",
-                frequency="Monthly (End of Month)",
-                source_id="Swiss National Bank (snboffzisa: LZ, UG0, OG0)",
+                units="% per annum (End of Month)",
+                transformation="None — Raw Policy Rate (LZ) & UG0–OG0",
+                frequency="Monthly (EOM)",
+                source_id="SNB (snboffzisa: LZ, UG0, OG0)",
                 latest_obs=latest_obs,
             )
 
-    # Row 3: Swiss Interest Rates & Spread | USD/CHF Spot Rate
-    r3_left, r3_right = st.columns(2, gap="medium")
-
-    with r3_left:
+    with r2_c2:
         with st.container(border=True):
             valid_rates = bundle["rates"]
             latest_spread = valid_rates.iloc[-1]["spread_bps"] if not valid_rates.empty else np.nan
@@ -1438,8 +1444,8 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
             badge = f"{latest_spread:+.0f} bps" if pd.notna(latest_spread) else "N/A"
 
             render_chart_header(
-                title="Swiss Interest Rates & Yield Curve Spread",
-                subtitle="10-Year sovereign yield, 3-month interbank rate, and term spread",
+                title="Swiss Rates & Yield Spread",
+                subtitle="10Y gov. yield, 3M rate & 10Y–3M spread",
                 badge_text=badge,
                 alert=bool(pd.notna(latest_spread) and latest_spread < 0),
             )
@@ -1449,23 +1455,23 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
                 config=PLOTLY_CONFIG,
             )
             render_chart_footer(
-                units="Rates: % p.a. (NSA) | Spread: Basis Points (bps)",
-                transformation="Spread (bps) = (Yield_10Y - Rate_3M) × 100 on matched monthly dates",
+                units="Rates: % p.a. (NSA) | Spread: bps",
+                transformation="Spread = (Yield_10Y - Rate_3M) × 100",
                 frequency="Monthly",
-                source_id="OECD via FRED (IRLTLT01CHM156N, IR3TIB01CHM156N)",
+                source_id="OECD / FRED (IRLTLT01, IR3TIB01)",
                 latest_obs=latest_obs,
             )
 
-    with r3_right:
+    with r2_c3:
         with st.container(border=True):
             valid_fx = bundle["fx"]
             latest_val = valid_fx.iloc[-1]["value"] if not valid_fx.empty else np.nan
             latest_obs = fmt_obs_date(valid_fx.iloc[-1]["date"], "Daily") if not valid_fx.empty else "N/A"
-            badge = f"{latest_val:.4f} CHF/USD" if pd.notna(latest_val) else "N/A"
+            badge = f"{latest_val:.4f}" if pd.notna(latest_val) else "N/A"
 
             render_chart_header(
-                title="USD/CHF Spot Exchange Rate",
-                subtitle="Daily noon buying rate in New York with 30-trading-day moving average",
+                title="USD/CHF Spot Rate",
+                subtitle="Daily spot & 30-trading-day moving avg.",
                 badge_text=badge,
             )
             st.plotly_chart(
@@ -1474,10 +1480,10 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
                 config=PLOTLY_CONFIG,
             )
             render_chart_footer(
-                units="CHF per 1 USD (Down = CHF Appreciation), NSA",
-                transformation="Raw Daily Spot + 30-Trading-Day Moving Average",
-                frequency="Daily (Business Days)",
-                source_id="Federal Reserve Board H.10 via FRED (DEXSZUS)",
+                units="CHF / 1 USD (Down = CHF Appreciation)",
+                transformation="Raw Daily Spot + 30-Trading-Day MA",
+                frequency="Daily (Bus. Days)",
+                source_id="Fed Board H.10 / FRED (DEXSZUS)",
                 latest_obs=latest_obs,
             )
 
@@ -1486,7 +1492,7 @@ def render_tab_dashboard(bundle: dict[str, Any], cfg: dict[str, Any]) -> None:
 # Tab 2 — Data Explorer & Export
 # ---------------------------------------------------------------------------
 def render_tab_explorer(bundle: dict[str, Any], cfg: dict[str, Any], meta_mtime: float) -> None:
-    st.markdown('<div class="section-head">Series Inspector & Institutional Data Export</div>', unsafe_allow_html=True)
+    render_html('<div class="section-head">Series Inspector & Institutional Data Export</div>')
 
     explorer_options = {
         "Real GDP (Quarterly — Raw, YoY %, QoQ %)": ("gdp", "gdp_real", "Quarterly"),
@@ -1508,7 +1514,7 @@ def render_tab_explorer(bundle: dict[str, Any], cfg: dict[str, Any], meta_mtime:
             horizontal=True,
         )
     with c3:
-        st.markdown("<div style='height: 1.55rem;'></div>", unsafe_allow_html=True)
+        render_html("<div style='height: 1.55rem;'></div>")
         zip_bytes = build_zip_bundle(meta_mtime)
         st.download_button(
             label="Download Full Swiss Macro Bundle (.ZIP)",
@@ -1526,7 +1532,6 @@ def render_tab_explorer(bundle: dict[str, Any], cfg: dict[str, Any], meta_mtime:
         else full_df
     )
 
-    # Rename columns cleanly for institutional display
     rename_map = {
         "date": "Date",
         "value": "Raw Value",
@@ -1654,11 +1659,7 @@ def _build_verification_markdown(rows: list[dict[str, Any]], metadata: dict[str,
 
 
 def render_tab_verification(bundle: dict[str, Any]) -> None:
-    # Section 1 — Primary Source Observation Audit Table
-    st.markdown(
-        '<div class="section-head">Section 1 — Primary Source Observation Audit Table (7 Core Series)</div>',
-        unsafe_allow_html=True,
-    )
+    render_html('<div class="section-head">Section 1 — Primary Source Observation Audit Table (7 Core Series)</div>')
     audit_rows = _build_verification_rows(bundle)
     audit_df = pd.DataFrame(audit_rows)
 
@@ -1683,14 +1684,9 @@ def render_tab_verification(bundle: dict[str, Any]) -> None:
         mime="text/markdown",
     )
 
-    st.markdown("<div style='height: 0.75rem;'></div>", unsafe_allow_html=True)
-
-    # Section 2 — Automated Refresh Execution Log
-    st.markdown(
-        '<div class="section-head">Section 2 — Automated Refresh Execution Log</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
+    render_html("<div style='height: 0.75rem;'></div>")
+    render_html('<div class="section-head">Section 2 — Automated Refresh Execution Log</div>')
+    render_html(
         """
         <div class="info-callout">
             <strong>Audit Interpretation:</strong> A refresh entry with <code>status = success</code> and
@@ -1698,8 +1694,7 @@ def render_tab_verification(bundle: dict[str, Any]) -> None:
             statistical agencies (SNB, Eurostat, OECD, Federal Reserve) have not yet published a newer observation
             since the preceding run.
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
     log_df = bundle["log_df"].copy()
@@ -1724,17 +1719,15 @@ def render_tab_verification(bundle: dict[str, Any]) -> None:
     else:
         st.info("No refresh log entries found yet.")
 
-    st.markdown("<div style='height: 0.75rem;'></div>", unsafe_allow_html=True)
-
-    # Section 3 — Methodology & Transformation Equations
-    st.markdown(
-        '<div class="section-head">Section 3 — Methodology & Transformation Equations</div>',
-        unsafe_allow_html=True,
-    )
+    render_html("<div style='height: 0.75rem;'></div>")
+    render_html('<div class="section-head">Section 3 — Methodology & Transformation Equations</div>')
     m_left, m_right = st.columns(2, gap="medium")
     with m_left:
         st.markdown("**1. Real GDP Growth (Quarterly — Compute-Before-Slice)**")
-        st.latex(r"\text{GDP YoY}_t = \left(\frac{Y_t}{Y_{t-4}} - 1\right) \times 100 \qquad \text{GDP QoQ}_t = \left(\frac{Y_t}{Y_{t-1}} - 1\right) \times 100")
+        st.latex(
+            r"\text{GDP YoY}_t = \left(\frac{Y_t}{Y_{t-4}} - 1\right) \times 100"
+            r"\qquad \text{GDP QoQ}_t = \left(\frac{Y_t}{Y_{t-1}} - 1\right) \times 100"
+        )
 
         st.markdown("**2. Headline HICP Inflation (Monthly)**")
         st.latex(r"\pi_t^{\text{YoY}} = \left(\frac{\text{HICP}_t}{\text{HICP}_{t-12}} - 1\right) \times 100")

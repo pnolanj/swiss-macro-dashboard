@@ -599,7 +599,7 @@ def apply_institutional_layout(
             x=0.0,
             bgcolor="rgba(255,255,255,0)",
             font=dict(size=9.5, color=SLATE),
-            itemwidth=26,
+            itemwidth=30,
             tracegroupgap=6,
         ),
     )

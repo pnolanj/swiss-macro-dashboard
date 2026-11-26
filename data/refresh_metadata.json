@@ -1,8 +1,8 @@
 {
-  "last_successful_refresh_utc": "2026-11-25 18:08:18 UTC",
-  "last_successful_refresh_zurich": "2026-11-25 19:08:18 CET",
-  "last_attempt_utc": "2026-11-25 18:08:18 UTC",
-  "last_attempt_zurich": "2026-11-25 19:08:18 CET",
+  "last_successful_refresh_utc": "2026-11-26 21:05:46 UTC",
+  "last_successful_refresh_zurich": "2026-11-26 22:05:46 CET",
+  "last_attempt_utc": "2026-11-26 21:05:46 UTC",
+  "last_attempt_zurich": "2026-11-26 22:05:46 CET",
   "trigger": "github_actions",
   "status": "success",
   "series_succeeded": 9,
